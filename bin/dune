@@ -1,4 +1,4 @@
 (executable
  (public_name aqueduct)
  (name main)
- (libraries aqueduct core bencode))
+ (libraries aqueduct))

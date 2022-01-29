@@ -13,5 +13,5 @@ dune build
 
 Run the executable:
 ```
-dune exec ./bin/main.exe example.torrent
+dune exec ./bin/main.exe samples/cosmos-laundromat.torrent cosmos-laundromat
 ```
