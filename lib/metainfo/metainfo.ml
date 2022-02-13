@@ -68,3 +68,5 @@ let from_bencode bencode =
 
 let from_file file_path =
   Bencode.decode (`File_path file_path) |> from_bencode
+
+let tracker_url metainfo = metainfo.announce
