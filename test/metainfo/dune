@@ -2,5 +2,6 @@
  (name metainfoTest)
  (libraries core metainfo)
  (modules metainfoTest testData)
- (inline_tests (deps ../../samples/cosmos-laundromat.torrent))
+ (inline_tests (deps ../../samples/cosmos-laundromat.torrent ../../samples/ubuntu.iso.torrent))
  (preprocess (pps ppx_inline_test)))
+ 

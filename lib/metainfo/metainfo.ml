@@ -6,12 +6,16 @@ type file = {
   name : string
 }
 
+type payload =
+  | Single_file of { length : int64 }
+  | Directory of { files : file list }
+
 (* TODO support single file torrents *)
 type info = {
   name : string;
   piece_length : int64;
   pieces : Sha1.t list;
-  files : file list;
+  payload : payload;
 }
 
 type t = {
@@ -26,6 +30,10 @@ let rec parse_pieces concatenated_hashes =
     let hash = String.prefix concatenated_hashes 20 |> Bytes.of_string |> Sha1.of_bin in
     let rest = String.drop_prefix concatenated_hashes 20 in
     (hash :: parse_pieces rest)
+
+let parse_files files =
+  ignore files;
+  []
 
 let from_bencode bencode =
   let announce =
@@ -53,8 +61,20 @@ let from_bencode bencode =
     |> Option.map ~f:parse_pieces
     |> Option.value_exn
   in
-  let files =
-    [] (* TODO *)
+  let single_file_payload =
+    Bencode.dict_get info "length"
+    |> Option.bind ~f:Bencode.as_int
+    |> Option.map ~f:(fun length -> Single_file { length })
+  in
+  let directory_payload =
+    Bencode.dict_get info "files"
+    |> Option.bind ~f:Bencode.as_list
+    |> Option.map ~f:(fun files -> Directory { files = parse_files files })
+  in
+  let payload =
+    match single_file_payload with
+    | Some payload -> payload
+    | None -> Option.value_exn directory_payload
   in
   {
     announce;
@@ -62,7 +82,7 @@ let from_bencode bencode =
       name;
       piece_length;
       pieces;
-      files;
+      payload;
     };
   }
 
@@ -76,3 +96,5 @@ let suggested_name metainfo = metainfo.info.name
 let piece_length metainfo = metainfo.info.piece_length
 
 let piece_hashes metainfo = metainfo.info.pieces
+
+let payload metainfo = metainfo.info.payload
