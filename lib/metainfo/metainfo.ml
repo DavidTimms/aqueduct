@@ -1,4 +1,5 @@
 open Core
+open Utils
 
 type file = {
   length : int64;
@@ -31,9 +32,26 @@ let rec parse_pieces concatenated_hashes =
     let rest = String.drop_prefix concatenated_hashes 20 in
     (hash :: parse_pieces rest)
 
-let parse_files files =
-  ignore files;
-  []
+let parse_file bencode =
+  let length =
+    Bencode.dict_get bencode "length"
+    |> Option.bind ~f:Bencode.as_int
+    |> Option.value_exn
+  in
+  let path =
+    Bencode.dict_get bencode "path"
+    |> Option.bind ~f:Bencode.as_list
+    |> Option.bind ~f:(traverse_options ~f:Bencode.as_string)
+    |> Option.value_exn
+  in
+  {
+    length;
+    directory_path = List.drop_last_exn path;
+    name = List.last_exn path;
+  }
+
+let parse_files =
+  List.map ~f:parse_file
 
 let from_bencode bencode =
   let announce =
@@ -98,3 +116,9 @@ let piece_length metainfo = metainfo.info.piece_length
 let piece_hashes metainfo = metainfo.info.pieces
 
 let payload metainfo = metainfo.info.payload
+
+let file_length (file : file) = file.length
+
+let file_name (file : file) = file.name
+
+let file_directory_path (file : file) = file.directory_path

@@ -17,3 +17,9 @@ val piece_length : t -> int64
 val piece_hashes : t -> Sha1.t list
 
 val payload : t -> payload
+
+val file_length : file -> int64
+
+val file_name : file -> string
+
+val file_directory_path : file -> string list
