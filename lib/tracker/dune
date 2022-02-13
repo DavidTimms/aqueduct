@@ -1,0 +1,3 @@
+(library
+ (name tracker)
+ (libraries core bencode sha utils))
