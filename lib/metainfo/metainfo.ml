@@ -10,7 +10,7 @@ type file = {
 type info = {
   name : string;
   piece_length : int64;
-  pieces : string list;
+  pieces : Sha1.t list;
   files : file list;
 }
 
@@ -23,7 +23,7 @@ let rec parse_pieces concatenated_hashes =
   if String.is_empty concatenated_hashes then
     [] 
   else
-    let hash = String.prefix concatenated_hashes 20 in
+    let hash = String.prefix concatenated_hashes 20 |> Bytes.of_string |> Sha1.of_bin in
     let rest = String.drop_prefix concatenated_hashes 20 in
     (hash :: parse_pieces rest)
 
@@ -70,3 +70,9 @@ let from_file file_path =
   Bencode.decode (`File_path file_path) |> from_bencode
 
 let tracker_url metainfo = metainfo.announce
+
+let suggested_name metainfo = metainfo.info.name
+
+let piece_length metainfo = metainfo.info.piece_length
+
+let piece_hashes metainfo = metainfo.info.pieces

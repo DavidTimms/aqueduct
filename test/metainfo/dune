@@ -1,5 +1,6 @@
 (library
- (name metainfo_test)
+ (name metainfoTest)
  (libraries core metainfo)
+ (modules metainfoTest testData)
  (inline_tests (deps ../../samples/cosmos-laundromat.torrent))
  (preprocess (pps ppx_inline_test)))
