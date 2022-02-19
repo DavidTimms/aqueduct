@@ -1,7 +1,6 @@
 open! Core
-open Utils
 
-type response = todo
+type response = Bencode.t
 
 type event =
   | Started
@@ -25,4 +24,7 @@ let send_request
     ignore downloaded;
     ignore left;
     ignore event;
-    todo
+    Bencode.String "TODO"
+
+let response_to_string response =
+  Bencode.pretty_print response

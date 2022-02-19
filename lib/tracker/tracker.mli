@@ -17,3 +17,5 @@ val send_request :
   left:int64 ->
   event:event ->
   response
+
+val response_to_string : response -> string
