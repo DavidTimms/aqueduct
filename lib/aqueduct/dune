@@ -1,3 +1,4 @@
 (library
  (name aqueduct)
- (libraries core metainfo tracker))
+ (wrapped false)
+ (libraries core async cohttp cohttp-async bencode sha))

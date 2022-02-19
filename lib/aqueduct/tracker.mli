@@ -7,11 +7,12 @@ type event =
   | Started
   | Completed
   | Stopped
+  | Empty
 
 val send_request :
   tracker_url:string ->
   info_hash:Sha1.t ->
-  peer_id:string ->
+  peer_id:Peer_id.t ->
   port:int ->
   uploaded:int64 ->
   downloaded:int64 ->

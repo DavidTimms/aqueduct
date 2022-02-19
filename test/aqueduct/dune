@@ -1,6 +1,6 @@
 (library
- (name metainfoTest)
- (libraries core metainfo)
+ (name aqueduct_test)
+ (libraries core aqueduct)
  (modules metainfoTest testData)
  (inline_tests (deps ../../samples/cosmos-laundromat.torrent ../../samples/ubuntu.iso.torrent))
  (preprocess (pps ppx_inline_test)))

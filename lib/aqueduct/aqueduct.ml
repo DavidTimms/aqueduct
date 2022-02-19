@@ -1,7 +1,6 @@
 open Core
 open Async
-
-let (let*) = Deferred.Let_syntax.(>>=)
+open Async_syntax
 
 let download ~torrent:torrent_file_path ~destination  =
   ignore destination;
@@ -11,7 +10,7 @@ let download ~torrent:torrent_file_path ~destination  =
     Tracker.send_request
     ~tracker_url:(tracker_url metainfo)
     ~info_hash:(info_hash metainfo)
-    ~peer_id:"aqueduct-test"
+    ~peer_id:(Peer_id.random ())
     ~port:6881
     ~uploaded:0L
     ~downloaded:0L
