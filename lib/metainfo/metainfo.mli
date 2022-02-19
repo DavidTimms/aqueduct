@@ -10,6 +10,8 @@ val from_file : string -> t
 
 val tracker_url : t -> string
 
+val info_hash: t -> Sha1.t
+
 val suggested_name : t -> string
 
 val piece_length : t -> int64

@@ -11,8 +11,8 @@ type payload =
   | Single_file of { length : int64 }
   | Directory of { files : file list }
 
-(* TODO support single file torrents *)
 type info = {
+  hash: Sha1.t;
   name : string;
   piece_length : int64;
   pieces : Sha1.t list;
@@ -63,6 +63,9 @@ let from_bencode bencode =
     Bencode.dict_get bencode "info"
     |> Option.value_exn
   in
+  let info_hash =
+    Bencode.encode_to_string info |> Sha1.string
+  in
   let name =
     Bencode.dict_get info "name"
     |> Option.bind ~f:Bencode.as_string
@@ -97,6 +100,7 @@ let from_bencode bencode =
   {
     announce;
     info = {
+      hash = info_hash;
       name;
       piece_length;
       pieces;
@@ -108,6 +112,8 @@ let from_file file_path =
   Bencode.decode (`File_path file_path) |> from_bencode
 
 let tracker_url metainfo = metainfo.announce
+
+let info_hash metainfo = metainfo.info.hash
 
 let suggested_name metainfo = metainfo.info.name
 
