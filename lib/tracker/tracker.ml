@@ -1,4 +1,5 @@
 open! Core
+open Async
 
 type response = Bencode.t
 
@@ -24,7 +25,7 @@ let send_request
     ignore downloaded;
     ignore left;
     ignore event;
-    Bencode.String "TODO"
+    return (Bencode.String "TODO")
 
 let response_to_string response =
   Bencode.pretty_print response

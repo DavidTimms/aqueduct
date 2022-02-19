@@ -1,4 +1,5 @@
 open! Core
+open Async
 
 type response
 
@@ -16,6 +17,6 @@ val send_request :
   downloaded:int64 ->
   left:int64 ->
   event:event ->
-  response
+  response Deferred.t
 
 val response_to_string : response -> string
