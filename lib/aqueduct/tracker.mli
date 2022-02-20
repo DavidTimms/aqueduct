@@ -1,6 +1,14 @@
 open! Core
 open Async
 
+module Peer_info : sig
+  type t = {
+    peer_id : Peer_id.t;
+    ip : string;
+    port : int;
+  }
+end
+
 module Response : sig
   type t
   val to_string : t -> string

@@ -1,7 +1,9 @@
 type t
 
+(* TODO make this a child module *)
 type file
 
+(* TODO make this a child module *)
 type payload =
 | Single_file of { length : int64 }
 | Directory of { files : file list }

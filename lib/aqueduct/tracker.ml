@@ -3,7 +3,7 @@ open! Async
 open Cohttp_async
 open Async_syntax
 
-module PeerInfo = struct
+module Peer_info = struct
   type t = {
     peer_id : Peer_id.t;
     ip : string;
@@ -23,7 +23,7 @@ end
 module Response = struct
   type t = {
     interval : int64;
-    peers : PeerInfo.t list
+    peers : Peer_info.t list
   }
 
   let to_string { interval; peers } =
@@ -41,7 +41,7 @@ module Response = struct
         let* peers =
           dict_get bencode "peers"
             >>= as_list
-            >>| List.map ~f:PeerInfo.from_bencode
+            >>| List.map ~f:Peer_info.from_bencode
         in
         return { interval; peers }
     ) |> Option.value_exn ~message:"Invalid tracker response"
