@@ -7,7 +7,7 @@ module PeerInfo = struct
   type t = {
     peer_id : Peer_id.t;
     ip : string;
-    port : int64;
+    port : int;
   }
 
   let from_bencode bencode =
@@ -15,7 +15,7 @@ module PeerInfo = struct
     let open Option_syntax in (
       let* peer_id = dict_get bencode "peer id" >>= as_string >>= Peer_id.from_string in
       let* ip = dict_get bencode "ip" >>= as_string in
-      let* port = dict_get bencode "port" >>= as_int in
+      let* port = dict_get bencode "port" >>= as_int >>= Int64.to_int in
       return { peer_id; ip; port }
     ) |> Option.value_exn ~message:"Invalid peer in tracker response"
 end
