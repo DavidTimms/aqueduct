@@ -1,7 +1,10 @@
 open! Core
 open Async
 
-type response
+module Response : sig
+  type t
+  val to_string : t -> string
+end
 
 type event =
   | Started
@@ -18,6 +21,5 @@ val send_request :
   downloaded:int64 ->
   left:int64 ->
   event:event ->
-  response Deferred.t
+  Response.t Deferred.t
 
-val response_to_string : response -> string
